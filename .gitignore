@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+.env
+blacklist.json   # optional – you might want to commit the initial empty file

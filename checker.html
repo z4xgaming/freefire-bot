@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Fire Blacklist Checker</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #eee;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 500px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        h1 {
+            color: #ff4757;
+            margin-bottom: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            margin: 20px 0;
+            background: #2c2c3e;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+        }
+        button {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #e03a4a;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #0f0f1f;
+            font-weight: bold;
+            display: none;
+        }
+        .loading {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #aaa;
+        }
+        footer {
+            margin-top: 30px;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🔥 Free Fire Blacklist Checker</h1>
+    <p>Enter a Free Fire ID to see if it's blacklisted.</p>
+    <input type="text" id="ffid" placeholder="Example: 12345678">
+    <button onclick="checkID()">Check Status</button>
+    <div id="result" class="result"></div>
+    <div id="loading" class="loading">Loading blacklist data...</div>
+    <footer>Data is updated automatically from the Telegram bot.</footer>
+</div>
+
+<script>
+    const BLACKLIST_URL = "https://raw.githubusercontent.com/z4xgaming/freefire-blacklist-bot/main/blacklist.json";
+
+    let blacklist = [];
+
+    async function loadBlacklist() {
+        const loading = document.getElementById("loading");
+        try {
+            const res = await fetch(BLACKLIST_URL);
+            if (!res.ok) throw new Error("Failed to fetch");
+            blacklist = await res.json();
+            loading.style.display = "none";
+        } catch (err) {
+            loading.innerHTML = "⚠️ Could not load blacklist. Try again later.";
+            console.error(err);
+        }
+    }
+
+    function checkID() {
+        const id = document.getElementById("ffid").value.trim();
+        const resultDiv = document.getElementById("result");
+        if (!id) {
+            alert("Please enter an ID");
+            return;
+        }
+        if (blacklist.includes(id)) {
+            resultDiv.innerHTML = `❌ ID ${id} is <strong style="color:#ff4757;">BLACKLISTED</strong>.`;
+        } else {
+            resultDiv.innerHTML = `✅ ID ${id} is <strong style="color:#4caf50;">NOT blacklisted</strong>.`;
+        }
+        resultDiv.style.display = "block";
+    }
+
+    loadBlacklist();
+</script>
+</body>
+</html>
