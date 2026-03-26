@@ -6,9 +6,9 @@ from telegram.ext import Application, CommandHandler, ContextTypes
 import requests
 
 # === CONFIGURATION ===
-ADMINS = [123456789]          # ← REPLACE WITH YOUR TELEGRAM USER ID
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")   # Set in Render environment
-GITHUB_REPO = "z4xgaming/freefire-blacklist-bot"
+ADMINS = [8037300335]                      # Your Telegram user ID
+GITHUB_TOKEN = "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"   # Hardcoded (not safe for public)
+GITHUB_REPO = "z4xgaming/FF-blacklist"    # Correct repo name
 GITHUB_FILE_PATH = "blacklist.json"
 GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
 
@@ -22,7 +22,6 @@ def load_blacklist():
 def save_blacklist(blacklist):
     with open("blacklist.json", "w") as f:
         json.dump(blacklist, f, indent=2)
-    # Push to GitHub after saving
     push_to_github(blacklist)
 
 def push_to_github(blacklist):
@@ -98,10 +97,13 @@ async def remove(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"ℹ️ ID {ff_id} was not in blacklist.")
 
 def main():
-    token = os.getenv("BOT_TOKEN")
-    if not token:
-        print("Error: BOT_TOKEN not set.")
-        return
+    # Hardcoded token – only for local testing
+    token = "8480955083:AAFVIXXvXmbt7irxXTUte3ppItRDwn_0CXA"
+    # For production, use environment variable:
+    # token = os.getenv("BOT_TOKEN")
+    # if not token:
+    #     print("Error: BOT_TOKEN not set.")
+    #     return
 
     app = Application.builder().token(token).build()
 
